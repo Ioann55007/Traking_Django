@@ -101,6 +101,7 @@ class BetweenModels(models.Model):
 
 class FinishModel(models.Model):
     root = models.CharField(max_length=50)
+    file_path = models.UUIDField(primary_key=True, default=uuid.uuid4)
     description = _("This text")
 
 
@@ -162,6 +163,9 @@ class Beam(models.Model):
 
     choises_fiels = models.CharField(max_length=133, choices=BeamChoices.choices, default='Tager')
 
+    def __str__(self):
+        return self.choises_fiels
+
 
 
 class Meat(models.Model):
@@ -189,7 +193,8 @@ class NAzz(models.Model):
 
 class Uniq(models.Model):
     cherif = models.CharField(max_length=45)
-    help_text = "This my text"
+    ty = models.TextField(help_text="This my text")
+
 
 
 def my_validator(value):
@@ -289,7 +294,21 @@ class Blog(models.Model):
     author = models.ForeignKey(Person, on_delete=models.CASCADE)
 
 
+class Autocomplete(models.Model):
+    name = models.CharField(max_length=90)
+    text_name = models.TextField()
+    date = models.DateField(auto_now_add=True)
 
+    def __str__(self):
+        return self.name
+
+
+class LinkAutocomplete(models.Model):
+    naf = models.CharField(max_length=90)
+    link = models.ForeignKey(Autocomplete, on_delete=models.CASCADE, related_name='link_set')
+    flink = models.ForeignKey(Autocomplete, on_delete=models.CASCADE, related_name='flink_set')
+    last_link = models.ForeignKey(Autocomplete, on_delete=models.CASCADE, related_name='last_link_set')
+    date = models.DateField(auto_now_add=True)
 
 
 

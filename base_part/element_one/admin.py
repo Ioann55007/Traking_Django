@@ -5,14 +5,13 @@ from django.utils.translation import ngettext
 
 from django import forms
 from .models import Alog, Logo, Class, DopClass, OneTo, Garden, Humans, BabyChild, ManyMotheland, \
-     FinishModel, Mass, Team, Meat, NAzz, Uniq, Rkt, Moon, Soon, Pers, Proverka_Uniq_Together, Omg, Yutug, \
-    Leam, Greet, Blog, Person, BetweenModels
+    FinishModel, Mass, Team, Meat, NAzz, Uniq, Rkt, Moon, Soon, Pers, Proverka_Uniq_Together, Omg, Yutug, \
+    Leam, Greet, Blog, Person, BetweenModels, Beam, Autocomplete, LinkAutocomplete
 from .widgets import RichTextEditorWidget
 
 
 @admin.register(Alog)
 class AlogAdmin(admin.ModelAdmin):
-
     list_display = ('fery', 'date', 'vdate', 'gdate', 'cdate')
     fieldsets = [
         ('Text information', {'fields': ['arry']}),
@@ -29,8 +28,8 @@ class AlogAdmin(admin.ModelAdmin):
 
 @admin.register(Logo)
 class LogoAdmin(admin.ModelAdmin):
-    list_display = ("id", "imy_name", "slug",  "ip_new", "file_path", "url")
-    list_display_links = ("id", "imy_name", "slug",  "ip_new", "file_path", "url")
+    list_display = ("id", "imy_name", "slug", "ip_new", "file_path", "url")
+    list_display_links = ("id", "imy_name", "slug", "ip_new", "file_path", "url")
     prepopulated_fields = {'slug': ('imy_name',)}
     list_filter = ['imy_name']
 
@@ -74,11 +73,10 @@ class ManyMothelandAdmin(admin.ModelAdmin):
     list_display = ('name',)
 
 
-
-
 @admin.register(FinishModel)
 class FinishModelAdmin(admin.ModelAdmin):
-    list_display = ('root',)
+    list_display = ('root', 'file_path', 'description')
+    readonly_fields = ('file_path',)
 
 
 @admin.register(Mass)
@@ -137,7 +135,7 @@ class NAzzAdmin(admin.ModelAdmin):
 
 @admin.register(Uniq)
 class UniqAdmin(admin.ModelAdmin):
-    list_display = ('cherif',)
+    list_display = ('cherif', 'ty')
 
 
 @admin.register(Rkt)
@@ -175,8 +173,6 @@ class OmgAdminForm(forms.ModelForm):
             self.add_error('fox', msg)
 
 
-
-
 @admin.register(Omg)
 class OmgAdmin(admin.ModelAdmin):
     list_display = ('fox',)
@@ -185,7 +181,7 @@ class OmgAdmin(admin.ModelAdmin):
 
 @admin.register(Greet)
 class GreetAdmin(admin.ModelAdmin):
-      exclude = ('fees',)
+    exclude = ('fees',)
 
 
 @admin.register(Yutug)
@@ -211,7 +207,33 @@ class BlogAdmin(admin.ModelAdmin):
         return obj.author.first_name
 
 
-
 @admin.register(BetweenModels)
 class BetweenModelsAdmin(admin.ModelAdmin):
     list_display = ('manymotheland', 'babychild', 'invit')
+
+
+@admin.register(Beam)
+class BeamModelsAdmin(admin.ModelAdmin):
+    radio_fields = {'choises_fiels': admin.VERTICAL}
+
+
+@admin.register(Autocomplete)
+class AutocompleteAdmin(admin.ModelAdmin):
+    list_display = ('name', 'text_name', 'date')
+    ordering = ['date']
+    search_fields = ['name']
+
+
+@admin.register(LinkAutocomplete)
+class LinkAutocompleteAdmin(admin.ModelAdmin):
+    list_display = ('naf', 'link', 'flink', 'last_link', 'date')
+    autocomplete_fields = ['flink']
+    raw_id_fields = ('last_link',)
+
+
+
+
+
+
+
+
