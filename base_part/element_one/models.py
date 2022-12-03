@@ -1,3 +1,5 @@
+import uuid
+
 from django.contrib import admin
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -22,12 +24,13 @@ class Alog(models.Model):
 
 
 class Logo(models.Model):
-    id = models.GenericIPAddressField(protocol='both', unpack_ipv4=True, primary_key=True)
+    id = models.GenericIPAddressField(protocol='both', unpack_ipv4=True)
     slug = models.SlugField()
     imy_name = models.CharField(max_length=80)
     ip_new = models.TextField()
-    file_path = models.UUIDField()
+    file_path = models.UUIDField(primary_key=True, default=uuid.uuid4)
     url = models.URLField()
+
 
 
 class Class(models.Model):
@@ -50,6 +53,9 @@ class DopClass(models.Model):
 class Garden(models.Model):
     name = models.CharField(max_length=77)
 
+    def __str__(self):
+        return self.name
+
 
 class OneTo(models.Model):
     name = models.OneToOneField(Garden, on_delete=models.CASCADE)
@@ -64,7 +70,8 @@ class Humans(models.Model):
 class BabyChild(models.Model):
     name = models.CharField(max_length=77)
 
-
+    def __str__(self):
+        return self.name
 
 
 
@@ -76,6 +83,9 @@ class ManyMotheland(models.Model):
         through='BetweenModels',
         through_fields=('manymotheland', 'babychild', ),
     )
+
+    def __str__(self):
+        return self.name
 
 
 class BetweenModels(models.Model):
@@ -270,6 +280,8 @@ class Yutug(models.Model):
 class Person(models.Model):
     first_name = models.CharField(max_length=50)
 
+    def __str__(self):
+        return self.first_name
 
 
 class Blog(models.Model):

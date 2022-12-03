@@ -5,8 +5,8 @@ from django.utils.translation import ngettext
 
 from django import forms
 from .models import Alog, Logo, Class, DopClass, OneTo, Garden, Humans, BabyChild, ManyMotheland, \
-    BetweenModels, FinishModel, Mass, Team, Meat, NAzz, Uniq, Rkt, Moon, Soon, Pers, Proverka_Uniq_Together, Omg, Yutug, \
-    Leam, Greet, Blog
+     FinishModel, Mass, Team, Meat, NAzz, Uniq, Rkt, Moon, Soon, Pers, Proverka_Uniq_Together, Omg, Yutug, \
+    Leam, Greet, Blog, Person, BetweenModels
 from .widgets import RichTextEditorWidget
 
 
@@ -29,8 +29,8 @@ class AlogAdmin(admin.ModelAdmin):
 
 @admin.register(Logo)
 class LogoAdmin(admin.ModelAdmin):
-    list_display = ("id", "slug", "imy_name", "ip_new", "file_path", "url")
-    list_display_links = ("id", "slug", "imy_name", "ip_new", "file_path", "url")
+    list_display = ("id", "imy_name", "slug",  "ip_new", "file_path", "url")
+    list_display_links = ("id", "imy_name", "slug",  "ip_new", "file_path", "url")
     prepopulated_fields = {'slug': ('imy_name',)}
     list_filter = ['imy_name']
 
@@ -74,9 +74,6 @@ class ManyMothelandAdmin(admin.ModelAdmin):
     list_display = ('name',)
 
 
-@admin.register(BetweenModels)
-class BetweenModelsAdmin(admin.ModelAdmin):
-    list_display = ('babychild', 'manymotheland')
 
 
 @admin.register(FinishModel)
@@ -194,13 +191,20 @@ class GreetAdmin(admin.ModelAdmin):
 @admin.register(Yutug)
 class YutugAdmin(admin.ModelAdmin):
     list_display = ('first_name', 'slug', 'colored_first_name')
+    list_per_page = 2
 
 
+@admin.register(Person)
+class PersonAdmin(admin.ModelAdmin):
+    list_display = ('first_name',)
 
 
 @admin.register(Blog)
 class BlogAdmin(admin.ModelAdmin):
     list_display = ('title', 'author', 'author_first_name')
+    list_display_links = ('author_first_name',)
+    list_editable = ('title', 'author')
+    list_select_related = ['author']
 
     @admin.display(ordering='author__first_name')
     def author_first_name(self, obj):
@@ -208,3 +212,6 @@ class BlogAdmin(admin.ModelAdmin):
 
 
 
+@admin.register(BetweenModels)
+class BetweenModelsAdmin(admin.ModelAdmin):
+    list_display = ('manymotheland', 'babychild', 'invit')
