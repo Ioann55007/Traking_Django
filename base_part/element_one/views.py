@@ -37,11 +37,6 @@ class ContactView(View):
         return render(request, self.template_name)
 
 
-class MainView(View):
-    template_name = 'main.html'
-
-    def get(self, request):
-        return render(request, self.template_name)
 
 
 class ScheduleView(View):

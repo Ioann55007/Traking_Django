@@ -42,9 +42,9 @@
             <div class="nav-menu">
                 <nav class="mainmenu mobile-menu">
                     <ul>
-                        <li><a href="./index.html">Home</a></li>
-                        <li><a href="./about-us.html">About</a></li>
-                        <li><a href="./speaker.html">Speakers</a>
+                        <li><a href="{% url 'element_one:index' %}">Home</a></li>
+                        <li><a href="{% url 'element_one:about' %}">About</a></li>
+                        <li><a href="{% url 'element_one:speaker' %}">Speakers</a>
                             <ul class="dropdown">
                                 <li><a href="#">Jayden</a></li>
                                 <li><a href="#">Sara</a></li>
@@ -52,9 +52,9 @@
                                 <li><a href="#">Harriet</a></li>
                             </ul>
                         </li>
-                        <li><a href="./schedule.html">Schedule</a></li>
-                        <li class="active"><a href="./blog.html">Blog</a></li>
-                        <li><a href="./contact.html">Contacts</a></li>
+                        <li><a href="{% url 'element_one:schedule' %}">Schedule</a></li>
+                        <li class="active"><a href="{% url 'element_one:blog' %}">Blog</a></li>
+                        <li><a href="{% url 'element_one:contact' %}">Contacts</a></li>
                     </ul>
                 </nav>
                 <a href="#" class="primary-btn top-btn"><i class="fa fa-ticket"></i> Ticket</a>
@@ -106,7 +106,7 @@
                                 re-energized and more hopeful. We are committed to a new future which we now own. You
                                 helped us learn how to be resilient change masters."</p>
                             <span>John Smith</span>
-                            <img src="img/quote-left.png" alt="">
+                            <img src="/static/img/quote-left.png" alt="">
                         </div>
                         <div class="bd-more-text">
                             <h4>Free Classifieds Using Them To Promote Your Stuff Online</h4>
