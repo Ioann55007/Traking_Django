@@ -22,6 +22,9 @@ class Alog(models.Model):
     feld_field = models.DurationField()
     file = models.FileField(upload_to='')
 
+    def __str__(self):
+        return self.arry
+
 
 class Logo(models.Model):
     id = models.GenericIPAddressField(protocol='both', unpack_ipv4=True)
@@ -195,6 +198,8 @@ class Uniq(models.Model):
     cherif = models.CharField(max_length=45)
     ty = models.TextField(help_text="This my text")
 
+    def __str__(self):
+        return self.cherif
 
 
 def my_validator(value):
@@ -260,12 +265,14 @@ class Omg(models.Model):
 
 class Greet(models.Model):
     name = models.CharField(max_length=100)
-    title = models.TextField()
-    fees = models.DateField(blank=True)
+    title = models.TextField(blank=True)
+    fees = models.DateField(null=True)
 
     def get_absolute_url(self):
-        from django.urls import reverse
-        return reverse('additional_text', kwargs={'pk': self.pk})
+        return reverse('element_one:additional_text', kwargs={'pk': self.pk})
+
+    def __str__(self):
+        return self.name
 
 
 class Yutug(models.Model):

@@ -8,6 +8,9 @@ from .models import Alog, Logo, Class, DopClass, OneTo, Garden, Humans, BabyChil
     FinishModel, Mass, Team, Meat, NAzz, Uniq, Rkt, Moon, Soon, Pers, Proverka_Uniq_Together, Omg, Yutug, \
     Leam, Greet, Blog, Person, BetweenModels, Beam, Autocomplete, LinkAutocomplete
 from .widgets import RichTextEditorWidget
+from django.template.response import TemplateResponse
+from django.urls import path
+
 
 
 @admin.register(Alog)
@@ -24,6 +27,7 @@ class AlogAdmin(admin.ModelAdmin):
     list_display_links = ('fery',)
     list_filter = ['date']
     date_hierarchy = 'date'
+    save_on_top = True
 
 
 @admin.register(Logo)
@@ -32,6 +36,11 @@ class LogoAdmin(admin.ModelAdmin):
     list_display_links = ("id", "imy_name", "slug", "ip_new", "file_path", "url")
     prepopulated_fields = {'slug': ('imy_name',)}
     list_filter = ['imy_name']
+
+
+@admin.register(DopClass)
+class DopClassAdmin(admin.ModelAdmin):
+    list_display = ('grat', 'fra', 'trt', 'trirtj', 'uyihok', 'ogohhbk')
 
 
 class DopClassInline(admin.TabularInline):
@@ -46,15 +55,18 @@ class ClassAdmin(admin.ModelAdmin):
     ]
 
 
+
 @admin.register(OneTo)
 class OneToAdmin(admin.ModelAdmin):
     list_display = ("name", "name_link")
+
 
 
 @admin.register(Garden)
 class GardenAdmin(admin.ModelAdmin):
     list_display = ("name",)
     search_fields = ['name']
+    search_help_text = 'Search to eazy'
 
 
 @admin.register(Humans)
@@ -66,6 +78,8 @@ class HumansAdmin(admin.ModelAdmin):
 @admin.register(BabyChild)
 class BabyChildAdmin(admin.ModelAdmin):
     list_display = ('name',)
+
+
 
 
 @admin.register(ManyMotheland)
@@ -136,6 +150,8 @@ class NAzzAdmin(admin.ModelAdmin):
 @admin.register(Uniq)
 class UniqAdmin(admin.ModelAdmin):
     list_display = ('cherif', 'ty')
+    save_as = True
+    save_as_continue = False
 
 
 @admin.register(Rkt)
@@ -179,9 +195,11 @@ class OmgAdmin(admin.ModelAdmin):
     form = OmgAdminForm
 
 
+
 @admin.register(Greet)
 class GreetAdmin(admin.ModelAdmin):
     exclude = ('fees',)
+    view_on_site = False
 
 
 @admin.register(Yutug)
@@ -195,6 +213,10 @@ class PersonAdmin(admin.ModelAdmin):
     list_display = ('first_name',)
 
 
+class MyInline(admin.TabularInline):
+    model = Blog
+
+
 @admin.register(Blog)
 class BlogAdmin(admin.ModelAdmin):
     list_display = ('title', 'author', 'author_first_name')
@@ -205,6 +227,8 @@ class BlogAdmin(admin.ModelAdmin):
     @admin.display(ordering='author__first_name')
     def author_first_name(self, obj):
         return obj.author.first_name
+
+
 
 
 @admin.register(BetweenModels)

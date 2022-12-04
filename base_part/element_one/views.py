@@ -56,7 +56,7 @@ class SpeakerView(View):
 class GreetView(View):
     template_name = 'additional-text.html'
 
-    def get(self, request):
-        return render(request, self.template_name)
+    def get(self, request, pk):
+        return render(request, self.template_name, {'pk': pk})
 
 
