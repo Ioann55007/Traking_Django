@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 sun = "*"
+self = "*"
 
 [dev-packages]
 

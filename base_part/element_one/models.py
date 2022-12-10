@@ -1,6 +1,8 @@
 import uuid
 
 from django.contrib import admin
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.contrib.auth.models import User
@@ -290,6 +292,7 @@ class Yutug(models.Model):
 
 
 class Person(models.Model):
+    objects = models.Manager()
     first_name = models.CharField(max_length=50)
 
     def __str__(self):
@@ -319,9 +322,35 @@ class LinkAutocomplete(models.Model):
 
 
 
+class Pebon(models.Model):
+    name = models.CharField(max_length=128)
+
+    def __str__(self):
+        return self.name
+
+class Group(models.Model):
+    name = models.CharField(max_length=128)
+    members = models.ManyToManyField(Pebon, through='Membership')
+
+    def __str__(self):
+        return self.name
+
+class Membership(models.Model):
+    pebon = models.ForeignKey(Pebon, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    date_joined = models.DateField()
+    invite_reason = models.CharField(max_length=64)
 
 
+class Image(models.Model):
+    image = models.ImageField(upload_to="")
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey('content_type', 'object_id')
 
+
+class Product(models.Model):
+    name = models.CharField(max_length=100)
 
 
 

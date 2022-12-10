@@ -1,15 +1,16 @@
 from django.contrib import admin, messages
-from django.core.exceptions import ValidationError
+
+from django.contrib.contenttypes.admin import GenericTabularInline
 from django.db import models
-from django.utils.translation import ngettext
+from django.forms import BaseModelFormSet
+from django.utils.translation import ngettext, gettext_lazy
 
 from django import forms
 from .models import Alog, Logo, Class, DopClass, OneTo, Garden, Humans, BabyChild, ManyMotheland, \
     FinishModel, Mass, Team, Meat, NAzz, Uniq, Rkt, Moon, Soon, Pers, Proverka_Uniq_Together, Omg, Yutug, \
-    Leam, Greet, Blog, Person, BetweenModels, Beam, Autocomplete, LinkAutocomplete
+    Leam, Greet, Blog, Person, BetweenModels, Beam, Autocomplete, LinkAutocomplete, Membership, Pebon, Group, Image, \
+    Product
 from .widgets import RichTextEditorWidget
-from django.template.response import TemplateResponse
-from django.urls import path
 
 
 
@@ -48,11 +49,10 @@ class DopClassInline(admin.TabularInline):
     fk_name = "grat"
 
 
+
 @admin.register(Class)
 class ClassAdmin(admin.ModelAdmin):
-    inlines = [
-        DopClassInline,
-    ]
+    inlines = [DopClassInline]
 
 
 
@@ -212,10 +212,17 @@ class YutugAdmin(admin.ModelAdmin):
 class PersonAdmin(admin.ModelAdmin):
     list_display = ('first_name',)
 
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        return qs.filter(first_name=request.user)
 
 class MyInline(admin.TabularInline):
     model = Blog
 
+class MyAdminFormSet(BaseModelFormSet):
+    pass
 
 @admin.register(Blog)
 class BlogAdmin(admin.ModelAdmin):
@@ -227,7 +234,6 @@ class BlogAdmin(admin.ModelAdmin):
     @admin.display(ordering='author__first_name')
     def author_first_name(self, obj):
         return obj.author.first_name
-
 
 
 
@@ -253,6 +259,39 @@ class LinkAutocompleteAdmin(admin.ModelAdmin):
     list_display = ('naf', 'link', 'flink', 'last_link', 'date')
     autocomplete_fields = ['flink']
     raw_id_fields = ('last_link',)
+
+
+
+class MembershipInline(admin.TabularInline):
+    model = Membership
+    extra = 4
+
+@admin.register(Pebon)
+class PebonAdmin(admin.ModelAdmin):
+    inlines = (MembershipInline,)
+@admin.register(Group)
+class GroupAdmin(admin.ModelAdmin):
+    inlines = (MembershipInline,)
+
+
+class ImageInline(GenericTabularInline):
+    model = Image
+@admin.register(Product)
+class ProductAdmin(admin.ModelAdmin):
+    inlines = [
+        ImageInline,
+    ]
+
+
+
+
+
+
+
+
+
+
+
 
 
 
