@@ -9,7 +9,7 @@ from django import forms
 from .models import Alog, Logo, Class, DopClass, OneTo, Garden, Humans, BabyChild, ManyMotheland, \
     FinishModel, Mass, Team, Meat, NAzz, Uniq, Rkt, Moon, Soon, Pers, Proverka_Uniq_Together, Omg, Yutug, \
     Leam, Greet, Blog, Person, BetweenModels, Beam, Autocomplete, LinkAutocomplete, Membership, Pebon, Group, Image, \
-    Product
+    Product,Taos
 from .widgets import RichTextEditorWidget
 
 
@@ -96,7 +96,14 @@ class FinishModelAdmin(admin.ModelAdmin):
 @admin.register(Mass)
 class MassAdmin(admin.ModelAdmin):
     list_display = ('description', 'zail')
-    empty_value_display = 'This field not completed'
+
+@admin.register(Taos)
+class TaosAdmin(admin.ModelAdmin):
+    list_display = ('name', 'view_greet', 'agit')
+
+    @admin.display(empty_value='Пропущенно это поле.')
+    def view_greet(self, obj):
+        return obj.greet
 
 
 @admin.register(Team)
@@ -118,18 +125,18 @@ class LeamAdmin(admin.ModelAdmin):
     list_display_links = ('name', 'choises_fiels')
     actions = ['set_choic', 'update_choices']
 
-    @admin.action(description='Install  choices JUN')
+    @admin.action(description='Install  choices Junior')
     def set_choic(self, request, queryset):
-        message_update = queryset.update(choises_fiels=Leam.JUNIOR)
+        message_update=queryset.update(choises_fiels='JN')
         self.message_user(request, ngettext(
             'You have succssesfully %d story',
             'You have succssesfully %d stories',
             message_update,
         ) % message_update, messages.SUCCESS)
 
-    @admin.action(description='Install choices ASIS')
+    @admin.action(description='Install choices Asistant')
     def update_choices(self, request, queryset):
-        queryset.update(choises_fiels=Leam.ASISTANT)
+        queryset.update(choises_fiels='AS')
 
 
 @admin.register(Meat)
@@ -221,8 +228,7 @@ class PersonAdmin(admin.ModelAdmin):
 class MyInline(admin.TabularInline):
     model = Blog
 
-class MyAdminFormSet(BaseModelFormSet):
-    pass
+
 
 @admin.register(Blog)
 class BlogAdmin(admin.ModelAdmin):
@@ -281,22 +287,3 @@ class ProductAdmin(admin.ModelAdmin):
     inlines = [
         ImageInline,
     ]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

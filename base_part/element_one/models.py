@@ -79,8 +79,6 @@ class BabyChild(models.Model):
         return self.name
 
 
-
-
 class ManyMotheland(models.Model):
     name = models.CharField(max_length=128)
     members = models.ManyToManyField(
@@ -127,7 +125,16 @@ class HanFild(models.Field):
 
 class Mass(models.Model):
     description = HanFild()
-    zail = models.CharField(max_length=46, null=True)
+    zail = models.CharField(max_length=46)
+
+
+
+class Taos(models.Model):
+    name = models.CharField(max_length=15)
+    greet = models.CharField(max_length=10, blank=True, null=True)
+    agit = models.TextField()
+
+
 
 
 class Team(models.Model):
@@ -213,7 +220,7 @@ def my_validator(value):
 
 
 class Rkt(models.Model):
-    tiyjkh = models.IntegerField(validators=[my_validator])
+    tiyjkh = models.CharField(max_length=110, validators=[my_validator])
 
 
 class AbstractClass(models.Model):
