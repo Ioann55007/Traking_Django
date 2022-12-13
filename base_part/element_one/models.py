@@ -361,6 +361,33 @@ class Product(models.Model):
 
 
 
+class BlogTemplate(models.Model):
+    objects = models.Manager()
+    date = models.DateField(auto_now=True)
+    author_name = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=300)
+    blog_context = models.TextField()
+    comment = models.ForeignKey('Comment', on_delete=models.SET_NULL, blank=True, null=True)
+    slug = models.SlugField(unique=True)
+
+
+class Author(models.Model):
+    salutation = models.CharField(max_length=10)
+    name = models.CharField(max_length=200)
+    email = models.EmailField()
+    headshot = models.ImageField(upload_to='author_headshots')
+    last_accessed = models.DateTimeField()
+    objects = models.Manager()
+
+class Comment(models.Model):
+    name =  models.ForeignKey(User, on_delete=models.CASCADE)
+    email = models.EmailField()
+    phone = models.IntegerField()
+    messages = models.TextField()
+
+
+
+
 
 
 
