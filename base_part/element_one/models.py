@@ -368,7 +368,7 @@ class BlogTemplate(models.Model):
     title = models.CharField(max_length=300)
     blog_context = models.TextField()
     comment = models.ForeignKey('Comment', on_delete=models.SET_NULL, blank=True, null=True)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True, max_length=130,  default=uuid.uuid1, blank=True)
 
 
 class Author(models.Model):

@@ -7,7 +7,7 @@ urlpatterns = [
     path('', views.OpenView.as_view(), name='index'),
     path('about/', views.AboutView.as_view(), name='about'),
     path('blog/', views.BlogTemplateListView.as_view(), name='blog'),
-    path('<slug:slug>/', views.BlogTemplateDetailView.as_view(), name='blogtemplate-detail'),
+    path('blog/<slug:slug>/', views.BlogTemplateDetailView.as_view(), name='blogtemplate-detail'),
 
     path('authors/<int:pk>/', AuthorDetailView.as_view(), name='author-detail'),
 
