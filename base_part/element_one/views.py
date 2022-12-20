@@ -1,15 +1,19 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, get_object_or_404
-from django.template.context_processors import request
-from django.urls import reverse
 from django.utils import timezone
 from django.views import View
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView, DetailView
 from django.views.generic import ListView
+from django.views.generic.detail import SingleObjectMixin
+
 from .forms import ContactForm
 from django.views.generic.edit import FormView
-from .models import BlogTemplate, Author
+from .models import BlogTemplate, Author, Comment, Person, Blog
+from django.urls import reverse_lazy, reverse
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.http import JsonResponse, HttpResponseForbidden, HttpResponseRedirect
 
 
 class OpenView(View):
@@ -58,6 +62,32 @@ class AuthorDetailView(DetailView):
         return obj
 
 
+class AuthorCreateView(LoginRequiredMixin,  CreateView):
+    model = Author
+    fields = ['name']
+
+    def form_valid(self, form):
+        form.instance.created_by = self.request.user
+        return super().form_valid(form)
+
+class AuthorUpdateView(UpdateView):
+    model = Author
+    fields = ['name']
+
+
+class AuthorDeleteView(DeleteView):
+    model = Author
+    success_url = reverse_lazy('author-list')
+
+
+class RecordInterestView(SingleObjectMixin, View):
+    model = Author
+
+    def post(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return HttpResponseForbidden
+        self.object = self.get_object()
+        return HttpResponseRedirect(reverse('author-detail', kwargs={'pk': self.object.pk}))
 
 class ContactView(View):
     template_name = 'contact.html'
@@ -98,4 +128,48 @@ class ContactFormView(FormView):
     def form_valid(self, form):
         form.send_email()
         return super().form_valid(form)
+
+
+class JsonableResponseMixin:
+    def form_invalid(self, form):
+        response = super().form_invalid(form)
+        if self.request.accepts('text/html'):
+            return response
+        else:
+            return JsonResponse(form.errors, status=400)
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        if self.request.accepts('text/html'):
+            return response
+        else:
+            data = {
+                'pk': self.object.pk
+            }
+            return JsonResponse(data)
+
+class CommentCreateView(JsonableResponseMixin, CreateView):
+    model = Comment
+    fields = ['name']
+
+class PersonListView(ListView):
+    model = Person
+
+
+class BlogDetailView(SingleObjectMixin, ListView):
+
+    paginate_by = 2
+    # template_name = 'blogs/personer_detail.html'
+    template_name = 'element_one/personer_detail.html'
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object(queryset=Person.objects.all())
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['author'] = self.object
+        return context
+
+    def get_queryset(self):
+        return self.object.blog_set.all()
 

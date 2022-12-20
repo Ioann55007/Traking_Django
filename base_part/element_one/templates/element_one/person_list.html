@@ -1,0 +1,7 @@
+{% block content %}
+{% for person in object_list %}
+
+<a href="{% url 'element_one:person_detail' person.pk %}">{{ person.first_name }}
+
+{% endfor %}
+{% endblock %}

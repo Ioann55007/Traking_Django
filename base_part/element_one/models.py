@@ -1,5 +1,4 @@
 import uuid
-
 from django.contrib import admin
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
@@ -375,9 +374,16 @@ class Author(models.Model):
     salutation = models.CharField(max_length=10)
     name = models.CharField(max_length=200)
     email = models.EmailField()
-    headshot = models.ImageField(upload_to='author_headshots')
+    headshot = models.ImageField(upload_to='')
     last_accessed = models.DateTimeField()
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     objects = models.Manager()
+
+    def get_absolute_url(self):
+        return reverse('author-detail', kwargs={'pk': self.pk})
+
+
+
 
 class Comment(models.Model):
     name =  models.ForeignKey(User, on_delete=models.CASCADE)

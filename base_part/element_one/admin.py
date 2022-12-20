@@ -9,7 +9,7 @@ from django import forms
 from .models import Alog, Logo, Class, DopClass, OneTo, Garden, Humans, BabyChild, ManyMotheland, \
     FinishModel, Mass, Team, Meat, NAzz, Uniq, Rkt, Moon, Soon, Pers, Proverka_Uniq_Together, Omg, Yutug, \
     Leam, Greet, Blog, Person, BetweenModels, Beam, Autocomplete, LinkAutocomplete, Membership, Pebon, Group, Image, \
-    Product, Taos, BlogTemplate
+    Product, Taos, BlogTemplate, Author
 from .widgets import RichTextEditorWidget
 
 
@@ -291,3 +291,18 @@ class ProductAdmin(admin.ModelAdmin):
 @admin.register(BlogTemplate)
 class BlogTemplateAdmin(admin.ModelAdmin):
     list_display = ('author_name', 'title', 'blog_context', 'comment', 'slug', 'date')
+
+
+
+
+
+@admin.register(Author)
+class AuthorAdmin(admin.ModelAdmin):
+    list_display = ('salutation', 'name', 'email', 'headshot', 'last_accessed', 'created_by')
+
+
+
+
+
+
+

@@ -6,3 +6,9 @@ class ContactForm(forms.Form):
 
     def send_email(self):
         pass
+
+
+class CommentForm(forms.Form):
+    name = forms.CharField()
+    email = forms.EmailField()
+    text_message = forms.CharField(widget=forms.Textarea)
