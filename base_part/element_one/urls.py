@@ -1,8 +1,9 @@
 from django.urls import path
 from . import views
+from .models import Alog
 from .views import AuthorDetailView, AuthorCreateView, AuthorUpdateView, AuthorDeleteView, RecordInterestView, \
-    BlogDetailView, PersonListView
-
+    BlogDetailView, PersonListView, AlogListView
+from django.views.generic.dates import ArchiveIndexView
 app_name = 'element_one'
 
 
@@ -25,4 +26,6 @@ urlpatterns = [
     path('schedule/', views.ScheduleView.as_view(), name='schedule'),
     path('speaker/', views.SpeakerView.as_view(), name='speaker'),
     path('additional-text/<int:pk>/', views.GreetView.as_view(), name='additional_text'),
+    path('alog-list/', AlogListView.as_view(), name = 'alog-list'),
+    path('archive/', ArchiveIndexView.as_view(model = Alog, date_field='gdate'), name = 'alog_archive'),
 ]

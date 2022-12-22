@@ -1,0 +1,15 @@
+{% block content %}
+{% for alog in alogs %}
+    {{ alog.user }}:
+    {{ alog.arry }}:
+    {{ alog.ferry }}:
+    {{ user.feld_field }}
+    {{ user.file }}
+   Дата: {{ alog.date }}:
+     Вдата: {{ alog.vdate }}:
+    гдата: {{ alog.gdate }}:
+   сдата: {{ alog.cdate|linebreaks  }}
+
+{% endfor %}
+
+{% endblock %}

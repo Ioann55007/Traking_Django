@@ -12,6 +12,7 @@ from django.urls import reverse
 
 
 class Alog(models.Model):
+    objects = models.Manager()
     fery = models.AutoField(primary_key=True)
     arry = models.CharField(max_length=110)
     date = models.DateField(auto_now=True)

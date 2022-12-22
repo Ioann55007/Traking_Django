@@ -6,11 +6,12 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView, DetailView
 from django.views.generic import ListView
+from django.views.generic.dates import WeekMixin, _get_next_prev
 from django.views.generic.detail import SingleObjectMixin
 
-from .forms import ContactForm
+from .forms import ContactForm, AuthorInterestForm
 from django.views.generic.edit import FormView
-from .models import BlogTemplate, Author, Comment, Person, Blog
+from .models import BlogTemplate, Author, Comment, Person, Blog, Alog
 from django.urls import reverse_lazy, reverse
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.http import JsonResponse, HttpResponseForbidden, HttpResponseRedirect
@@ -25,7 +26,6 @@ class OpenView(View):
 
 class AboutView(TemplateView):
     template_name = 'about-us.html'
-
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
@@ -51,7 +51,7 @@ class BlogTemplateDetailView(DetailView):
 
 
 class AuthorDetailView(DetailView):
-
+    model = Author
     queryset = Author.objects.all()
 
     def get_object(self, **kwargs):
@@ -60,6 +60,36 @@ class AuthorDetailView(DetailView):
         obj.last_accessed = timezone.now()
         obj.save()
         return obj
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = AuthorInterestForm()
+        return context
+
+
+class AuthorInterestFormView(SingleObjectMixin, FormView):
+    model = Author
+    template_name = 'element_one/author_detail.html'
+    form_class = AuthorInterestForm
+
+    def post(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return HttpResponseForbidden()
+        self.object = self.get_object()
+        return super().post(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return reverse('author-detail', kwargs={'pk': self.object.pk})
+
+
+class AuthorView(View):
+    def get(self, request, *args, **kwargs):
+        view = AuthorDetailView.as_view()
+        return view(request,*args, **kwargs)
+    def post(self, request, *args, **kwargs):
+        view = AuthorInterestFormView.as_view()
+        return view(request, *args, **kwargs)
+
 
 
 class AuthorCreateView(LoginRequiredMixin,  CreateView):
@@ -156,7 +186,7 @@ class PersonListView(ListView):
     model = Person
 
 
-class BlogDetailView(SingleObjectMixin, ListView):
+class BlogDetailView(SingleObjectMixin, WeekMixin, ListView):
 
     paginate_by = 2
     # template_name = 'blogs/personer_detail.html'
@@ -172,4 +202,16 @@ class BlogDetailView(SingleObjectMixin, ListView):
 
     def get_queryset(self):
         return self.object.blog_set.all()
+
+
+
+class AlogListView(ListView):
+    model = Alog
+    context_object_name = 'alogs'
+    queryset = Alog.objects.order_by('-gdate' )
+
+
+
+
+
 
