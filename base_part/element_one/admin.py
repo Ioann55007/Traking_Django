@@ -2,15 +2,25 @@ from django.contrib import admin, messages
 
 from django.contrib.contenttypes.admin import GenericTabularInline
 from django.db import models
-from django.forms import BaseModelFormSet
+from django.db.models import User
 from django.utils.translation import ngettext, gettext_lazy
-
 from django import forms
 from .models import Alog, Logo, Class, DopClass, OneTo, Garden, Humans, BabyChild, ManyMotheland, \
     FinishModel, Mass, Team, Meat, NAzz, Uniq, Rkt, Moon, Soon, Pers, Proverka_Uniq_Together, Omg, Yutug, \
     Leam, Greet, Blog, Person, BetweenModels, Beam, Autocomplete, LinkAutocomplete, Membership, Pebon, Group, Image, \
     Product, Taos, BlogTemplate, Author
 from .widgets import RichTextEditorWidget
+from django.contrib.auth.admin import UserAdmin
+# from .models import User as BaseUserAdmin
+
+# @admin.register(BaseUserAdmin)
+# class User(UserAdmin):
+#     ordering = ['id']
+#     list_display = ['username', 'email'
+#                     ]
+
+
+
 
 
 

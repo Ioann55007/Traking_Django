@@ -1,0 +1,10 @@
+{% block content %}
+    {% for logo in object_list %}
+<a href="{% url 'element_one:logo_detail' logo.slug %}">{{ logo.imy_name|linebreaks }}</a>
+        {{ logo.ip_new|linebreaks }}
+        {{ logo.id|linebreaks }}
+        {{ logo.file_path|linebreaks }}
+        {{ logo.url|linebreaks }}
+    {% endfor %}
+
+{% endblock %}

@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 from django.views import View
@@ -9,9 +10,11 @@ from django.views.generic import ListView
 from django.views.generic.dates import WeekMixin, _get_next_prev
 from django.views.generic.detail import SingleObjectMixin
 
-from .forms import ContactForm, AuthorInterestForm
+# from .forms import ContactForm, AuthorInterestForm, RegistrationForm
 from django.views.generic.edit import FormView
-from .models import BlogTemplate, Author, Comment, Person, Blog, Alog
+
+from .forms import AuthorInterestForm, ContactForm, RegistrationForm
+from .models import BlogTemplate, Author, Comment, Person, Blog, Alog, Logo
 from django.urls import reverse_lazy, reverse
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.http import JsonResponse, HttpResponseForbidden, HttpResponseRedirect
@@ -26,7 +29,6 @@ class OpenView(View):
 
 class AboutView(TemplateView):
     template_name = 'about-us.html'
-
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
@@ -209,6 +211,53 @@ class AlogListView(ListView):
     model = Alog
     context_object_name = 'alogs'
     queryset = Alog.objects.order_by('-gdate' )
+
+
+class LogoListView(ListView):
+    model = Logo
+    queryset = Logo.objects.order_by('-imy_name')
+
+class LogoDetailView(DetailView):
+    model = Logo
+    slug_url_kwarg = 'logo_slug'
+    template_name = 'element_one/logo_detail.html'
+
+
+
+    def get_queryset(self):
+        self.object = Logo.objects.all()
+        return self.object
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        context['logoz'] = self.object
+        return context
+
+
+@login_required
+def profile_view(request):
+    return render(request, 'element_one/profile.html')
+
+
+class RegisterView(FormView):
+    form_class = RegistrationForm
+    template_name = 'registration/register.html'
+    success_url = reverse_lazy('element_one:profile')
+
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
+
+
+
+
+
+
+
+
+
 
 
 
