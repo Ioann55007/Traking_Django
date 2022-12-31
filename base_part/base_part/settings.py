@@ -107,10 +107,10 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+# TIME_ZONE = 'UTC'
 
 USE_I18N = True
-
+TIME_ZONE = 'Asia/Yekaterinburg'
 USE_TZ = True
 
 

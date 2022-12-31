@@ -1,0 +1,18 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% for author in author_list %}
+<h1>{{ author.name|linebreaks }}</h1>
+{{ author.created_by|linebreaks }}
+<h3>{{ author.salutation|linebreaks }}</h3>
+<em>{{ author.email|linebreaks }}</em>
+{{ author.last_accessed| date:"Y/m/d" }} {{author.last_accessed |time:"H:i"}}
+<p>{{ author.headshot }}</p>
+    <img src="{{ author.headshot.url }}/" height="130" width="200" class="avatar">
+{% endfor %}
+
+</body>
+</html>

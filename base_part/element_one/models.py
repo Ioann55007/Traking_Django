@@ -37,9 +37,11 @@ class Logo(models.Model):
     url = models.URLField()
 
 
-
 class Class(models.Model):
     add_class = models.CharField(max_length=99)
+
+    def __str__(self):
+        return self.add_class
 
 
 def get_deleted_user_instance():
@@ -84,7 +86,7 @@ class ManyMotheland(models.Model):
     members = models.ManyToManyField(
         BabyChild,
         through='BetweenModels',
-        through_fields=('manymotheland', 'babychild', ),
+        through_fields=('manymotheland', 'babychild',),
     )
 
     def __str__(self):
@@ -99,7 +101,6 @@ class BetweenModels(models.Model):
         on_delete=models.CASCADE,
         related_name="membership_invit",
     )
-
 
 
 class FinishModel(models.Model):
@@ -128,13 +129,10 @@ class Mass(models.Model):
     zail = models.CharField(max_length=46)
 
 
-
 class Taos(models.Model):
     name = models.CharField(max_length=15)
     greet = models.CharField(max_length=10, blank=True, null=True)
     agit = models.TextField()
-
-
 
 
 class Team(models.Model):
@@ -164,9 +162,6 @@ class Leam(models.Model):
     name = models.CharField(max_length=33)
 
 
-
-
-
 class Beam(models.Model):
     class BeamChoices(models.TextChoices):
         TIGER = 'TG', _('Tager')
@@ -177,7 +172,6 @@ class Beam(models.Model):
 
     def __str__(self):
         return self.choises_fiels
-
 
 
 class Meat(models.Model):
@@ -194,13 +188,9 @@ class Meat(models.Model):
                                     )
 
 
-
-
 class NAzz(models.Model):
     text = models.CharField(max_length=98)
     dop_text = models.TextField()
-
-
 
 
 class Uniq(models.Model):
@@ -235,9 +225,6 @@ class Moon(AbstractClass):
     lug = models.CharField(max_length=5)
 
 
-
-
-
 class Soon(models.Model):
     mbn = models.CharField(max_length=55)
 
@@ -251,7 +238,6 @@ class Proverka_Uniq_Together(models.Model):
 
     class Meta:
         unique_together = [['deliver', 'cafe']]
-
 
 
 class Pers(models.Model):
@@ -328,12 +314,12 @@ class LinkAutocomplete(models.Model):
     date = models.DateField(auto_now_add=True)
 
 
-
 class Pebon(models.Model):
     name = models.CharField(max_length=128)
 
     def __str__(self):
         return self.name
+
 
 class Group(models.Model):
     name = models.CharField(max_length=128)
@@ -341,6 +327,7 @@ class Group(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class Membership(models.Model):
     pebon = models.ForeignKey(Pebon, on_delete=models.CASCADE)
@@ -360,7 +347,6 @@ class Product(models.Model):
     name = models.CharField(max_length=100)
 
 
-
 class BlogTemplate(models.Model):
     objects = models.Manager()
     date = models.DateField(auto_now=True)
@@ -368,32 +354,33 @@ class BlogTemplate(models.Model):
     title = models.CharField(max_length=300)
     blog_context = models.TextField()
     comment = models.ForeignKey('Comment', on_delete=models.SET_NULL, blank=True, null=True)
-    slug = models.SlugField(unique=True, max_length=130,  default=uuid.uuid1, blank=True)
+    slug = models.SlugField(unique=True, max_length=130, default=uuid.uuid1, blank=True)
 
 
 class Author(models.Model):
     salutation = models.CharField(max_length=10)
     name = models.CharField(max_length=200)
     email = models.EmailField()
-    headshot = models.ImageField(upload_to='')
+    headshot = models.ImageField(upload_to="")
     last_accessed = models.DateTimeField()
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     objects = models.Manager()
 
     def get_absolute_url(self):
-        return reverse('author-detail', kwargs={'pk': self.pk})
-
-
+        return reverse('element_one:author-detail', kwargs={'pk': self.pk})
 
 
 class Comment(models.Model):
-    name =  models.ForeignKey(User, on_delete=models.CASCADE)
+    author_comment = models.ForeignKey(User, on_delete=models.CASCADE)
     email = models.EmailField()
     phone = models.IntegerField()
     messages = models.TextField()
 
+    def get_absolute_url(self):
+        return reverse('comment_detail', kwargs={'pk': self.pk})
 
+    def __str__(self):
+        return str(self.author_comment)
 
-
-
-
+    # def get_absolute_url(self):
+    #     return reverse('comment_detail', kwargs={'pk': self.pk})

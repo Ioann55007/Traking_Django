@@ -19,21 +19,13 @@ class CommentForm(forms.Form):
     text_message = forms.CharField(widget=forms.Textarea)
 
 
-class AuthorInterestForm(forms.Form):
-    message = forms.CharField()
+
 
 
 class RegistrationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = User
         fields = UserCreationForm.Meta.fields + ("email",)
-
-
-
-
-
-
-
 
 
 

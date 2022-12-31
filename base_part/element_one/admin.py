@@ -8,20 +8,8 @@ from django import forms
 from .models import Alog, Logo, Class, DopClass, OneTo, Garden, Humans, BabyChild, ManyMotheland, \
     FinishModel, Mass, Team, Meat, NAzz, Uniq, Rkt, Moon, Soon, Pers, Proverka_Uniq_Together, Omg, Yutug, \
     Leam, Greet, Blog, Person, BetweenModels, Beam, Autocomplete, LinkAutocomplete, Membership, Pebon, Group, Image, \
-    Product, Taos, BlogTemplate, Author
+    Product, Taos, BlogTemplate, Author, Comment
 from .widgets import RichTextEditorWidget
-from django.contrib.auth.admin import UserAdmin
-# from .models import User as BaseUserAdmin
-
-# @admin.register(BaseUserAdmin)
-# class User(UserAdmin):
-#     ordering = ['id']
-#     list_display = ['username', 'email'
-#                     ]
-
-
-
-
 
 
 @admin.register(Alog)
@@ -63,6 +51,11 @@ class DopClassInline(admin.TabularInline):
 @admin.register(Class)
 class ClassAdmin(admin.ModelAdmin):
     inlines = [DopClassInline]
+
+
+
+
+
 
 
 
@@ -304,15 +297,16 @@ class BlogTemplateAdmin(admin.ModelAdmin):
 
 
 
-
-
 @admin.register(Author)
 class AuthorAdmin(admin.ModelAdmin):
     list_display = ('salutation', 'name', 'email', 'headshot', 'last_accessed', 'created_by')
 
 
 
-
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('author_comment', 'email', 'phone')
+    list_display_links = ('author_comment',)
 
 
 

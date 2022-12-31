@@ -1,0 +1,19 @@
+
+{% block content %}
+
+<div class='post-entry'>
+    {% csrf_token %}
+<p>{{ author.created_by }}</p>
+<h2>{{ author.name }}</h2>
+<p>{{ author.salutation }}</p>
+<p>{{ author.email }}</p>
+<p>{{ author.last_accessed| date:"Y/m/d" }} {{author.last_accessed |time:"H:i"}}
+</p>
+<p>{{ author.headshot }}</p>
+    <img src="{{ author.headshot.url }}/" height="130" width="200" class="avatar">
+</div>
+
+
+
+
+{% endblock content %}

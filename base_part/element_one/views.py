@@ -7,17 +7,15 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView, DetailView
 from django.views.generic import ListView
-from django.views.generic.dates import WeekMixin, _get_next_prev
+from django.views.generic.dates import WeekMixin
 from django.views.generic.detail import SingleObjectMixin
-
-# from .forms import ContactForm, AuthorInterestForm, RegistrationForm
-from django.views.generic.edit import FormView
-
-from .forms import AuthorInterestForm, ContactForm, RegistrationForm
+from .forms import  ContactForm, RegistrationForm
 from .models import BlogTemplate, Author, Comment, Person, Blog, Alog, Logo
 from django.urls import reverse_lazy, reverse
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.http import JsonResponse, HttpResponseForbidden, HttpResponseRedirect
+from django.views.generic import FormView
+from django import forms
 
 
 class OpenView(View):
@@ -49,12 +47,17 @@ class BlogTemplateDetailView(DetailView):
         context['blogtemplate_list'] = BlogTemplate.objects.all()
         return context
 
-
+# class AuthorInterestForm(forms.Form):
+#     name = forms.CharField()
+#     salutation = forms.CharField()
+#     email = forms.EmailField()
+#     headshot = forms.ImageField()
+#     last_accessed = forms.DateTimeField()
 
 
 class AuthorDetailView(DetailView):
     model = Author
-    queryset = Author.objects.all()
+
 
     def get_object(self, **kwargs):
         obj = super().get_object()
@@ -63,40 +66,36 @@ class AuthorDetailView(DetailView):
         obj.save()
         return obj
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['form'] = AuthorInterestForm()
-        return context
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['form'] = AuthorInterestForm()
+    #     return context
 
 
-class AuthorInterestFormView(SingleObjectMixin, FormView):
-    model = Author
-    template_name = 'element_one/author_detail.html'
-    form_class = AuthorInterestForm
-
-    def post(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            return HttpResponseForbidden()
-        self.object = self.get_object()
-        return super().post(request, *args, **kwargs)
-
-    def get_success_url(self):
-        return reverse('author-detail', kwargs={'pk': self.object.pk})
-
-
-class AuthorView(View):
-    def get(self, request, *args, **kwargs):
-        view = AuthorDetailView.as_view()
-        return view(request,*args, **kwargs)
-    def post(self, request, *args, **kwargs):
-        view = AuthorInterestFormView.as_view()
-        return view(request, *args, **kwargs)
+# class AuthorInterestFormView(SingleObjectMixin, FormView):
+#     model = Author
+#     template_name = 'element_one/author_detail.html'
+#     form_class = AuthorInterestForm
+#
+#     def post(self, request, *args, **kwargs):
+#         if not request.user.is_authenticated:
+#             return HttpResponseForbidden()
+#         self.object = self.get_object()
+#         return super().post(request, *args, **kwargs)
+#
+#     def get_success_url(self):
+#         return reverse('element_one:author-detail', kwargs={'pk': self.object.pk})
 
 
+# class AuthorView(View):
+#     def get(self, request, *args, **kwargs):
+#         view = AuthorDetailView.as_view()
+#         return view(request,*args, **kwargs)
+#     def post(self, request, *args, **kwargs):
+#         view = AuthorInterestFormView.as_view()
+#         return view(request, *args, **kwargs)
 
-class AuthorCreateView(LoginRequiredMixin,  CreateView):
-    model = Author
-    fields = ['name']
+
 
     def form_valid(self, form):
         form.instance.created_by = self.request.user
@@ -109,7 +108,13 @@ class AuthorUpdateView(UpdateView):
 
 class AuthorDeleteView(DeleteView):
     model = Author
-    success_url = reverse_lazy('author-list')
+    success_url = reverse_lazy('element_one:author-list')
+
+class AuthorListView(ListView):
+    model = Author
+    queryset = Author.objects.order_by('-last_accessed')
+
+
 
 
 class RecordInterestView(SingleObjectMixin, View):
@@ -119,7 +124,7 @@ class RecordInterestView(SingleObjectMixin, View):
         if not request.user.is_authenticated:
             return HttpResponseForbidden
         self.object = self.get_object()
-        return HttpResponseRedirect(reverse('author-detail', kwargs={'pk': self.object.pk}))
+        return HttpResponseRedirect(reverse('element_one:author-detail', kwargs={'pk': self.object.pk}))
 
 class ContactView(View):
     template_name = 'contact.html'
@@ -180,9 +185,23 @@ class JsonableResponseMixin:
             }
             return JsonResponse(data)
 
-class CommentCreateView(JsonableResponseMixin, CreateView):
+class AuthorCreateView(JsonableResponseMixin, CreateView):
+        model = Author
+        fields = ['name', 'salutation', 'created_by', 'headshot', 'email']
+
+
+
+class CommentCreateView(LoginRequiredMixin, CreateView):
     model = Comment
-    fields = ['name']
+    template_name = 'element_one/comment_form.html'
+
+
+    fields = ['author_comment', 'phone']
+
+class CommentDetailView(DetailView):
+    model = Comment
+    template_name = 'element_one/comment_detail.html'
+
 
 class PersonListView(ListView):
     model = Person
