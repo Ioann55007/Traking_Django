@@ -11,6 +11,7 @@ from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
 
 
+
 class Alog(models.Model):
     objects = models.Manager()
     fery = models.AutoField(primary_key=True)
@@ -275,6 +276,7 @@ class Yutug(models.Model):
     first_name = models.CharField(max_length=97)
     slug = models.SlugField()
 
+
     @admin.display(ordering='first_name')
     def colored_first_name(self):
         return format_html(
@@ -357,6 +359,7 @@ class BlogTemplate(models.Model):
     slug = models.SlugField(unique=True, max_length=130, default=uuid.uuid1, blank=True)
 
 
+
 class Author(models.Model):
     salutation = models.CharField(max_length=10)
     name = models.CharField(max_length=200)
@@ -382,5 +385,4 @@ class Comment(models.Model):
     def __str__(self):
         return str(self.author_comment)
 
-    # def get_absolute_url(self):
-    #     return reverse('comment_detail', kwargs={'pk': self.pk})
+

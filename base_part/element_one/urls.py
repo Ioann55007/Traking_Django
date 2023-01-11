@@ -1,9 +1,11 @@
+from django.contrib.auth.models import User
 from django.urls import path
 from . import views
 from .models import Alog
 from .views import AuthorDetailView, AuthorCreateView, AuthorUpdateView, AuthorDeleteView, RecordInterestView, \
     BlogDetailView, PersonListView, AlogListView, LogoListView, LogoDetailView, profile_view, RegisterView, \
-    CommentCreateView, CommentDetailView, AuthorListView
+    CommentCreateView, CommentDetailView, AuthorListView, AuthorInterestFormView, get_contact_test_form, \
+     formset_view
 from django.views.generic.dates import ArchiveIndexView
 app_name = 'element_one'
 
@@ -24,6 +26,7 @@ urlpatterns = [
     path('author/<int:pk>/', AuthorUpdateView.as_view(), name='author-update'),
     path('author/<int:pk>/delete/', AuthorDeleteView.as_view(), name='author-delete'),
     path('author/<int:pk>/interest/', RecordInterestView.as_view(), name='author-interest'),
+    path('authors/<int:pk>/interest/', AuthorInterestFormView.as_view(), name='author-interests'),
     path('person-list/', PersonListView.as_view(), name='person-blog'),
     path('person-detail/<int:pk>/', BlogDetailView.as_view(), name='person_detail'),
     path('contact/', views.ContactFormView.as_view(), name='contact'),
@@ -36,5 +39,8 @@ urlpatterns = [
     path('logo_detail/<slug:logo_slug>/', LogoDetailView.as_view(), name = 'logo_detail'),
     path('comment/add/', CommentCreateView.as_view(), name='comment'),
     path('comment/<int:pk>/', CommentDetailView.as_view(), name = 'comment_detail'),
+    path('email-get/', get_contact_test_form, name='get_email'),
+    path('thanks/', views.EmailView.as_view(), name='thanks'),
+    path('conact/', formset_view, name='conact'),
 
 ]

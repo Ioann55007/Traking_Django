@@ -2,8 +2,7 @@ from django.contrib import admin, messages
 
 from django.contrib.contenttypes.admin import GenericTabularInline
 from django.db import models
-from django.db.models import User
-from django.utils.translation import ngettext, gettext_lazy
+from django.utils.translation import ngettext
 from django import forms
 from .models import Alog, Logo, Class, DopClass, OneTo, Garden, Humans, BabyChild, ManyMotheland, \
     FinishModel, Mass, Team, Meat, NAzz, Uniq, Rkt, Moon, Soon, Pers, Proverka_Uniq_Together, Omg, Yutug, \
